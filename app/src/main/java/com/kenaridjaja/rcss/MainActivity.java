@@ -1,8 +1,11 @@
 package com.kenaridjaja.rcss;
 
+import android.app.Activity;
+import android.content.Context;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
@@ -41,6 +44,7 @@ public class MainActivity extends AppCompatActivity {
         spinner = findViewById(R.id.spinnerSiteID);
 
         FillSpinnerSiteID();
+
 
         process.setOnClickListener(v -> {
             ConnectionHelper connectionHelper = new ConnectionHelper();
@@ -92,29 +96,59 @@ public class MainActivity extends AppCompatActivity {
 
             siteid.setThreshold(1);
             siteid.setAdapter(dataAdapter);
-            spinner.setAdapter(dataAdapter);
-            spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener(){
+//            spinner.setAdapter(dataAdapter);
+//            spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener(){
+//                @Override
+//                public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+//                    if(parent.getItemAtPosition(position).equals("Pilih Site ID!"))
+//                    {
+//
+//                    }
+//                    else{
+//                        String item = parent.getItemAtPosition(position).toString();
+//                        Toast.makeText(parent.getContext(), "Selected: " + item, Toast.LENGTH_SHORT).show();
+//                    }
+//                }
+//
+//                @Override
+//                public void onNothingSelected(AdapterView<?> parent){
+//                    //TODO Auto-generated method stub
+//                }
+//            });
+
+            siteid.setOnItemClickListener(new AdapterView.OnItemClickListener(){
                 @Override
-                public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                     if(parent.getItemAtPosition(position).equals("Pilih Site ID!"))
                     {
 
                     }
                     else{
                         String item = parent.getItemAtPosition(position).toString();
-                        Toast.makeText(parent.getContext(), "Selected: " + item, Toast.LENGTH_SHORT).show();
+                        Toast.makeText(parent.getContext(), "A: " + item, Toast.LENGTH_SHORT).show();
                     }
+
                 }
 
-                @Override
-                public void onNothingSelected(AdapterView<?> parent){
-                    //TODO Auto-generated method stub
-                }
+//                @Override
+//                public void onNothingSelected(AdapterView<?> parent){
+//                    //TODO Auto-generated method stub
+//                }
             });
+
+
 
 
         } catch (Exception ex) {
             Log.e("Set Error", ex.getMessage());
+        }
+    }
+
+    public void hideKeyPad(Activity activity, View view) {
+        if (view != null) {
+            InputMethodManager imm = (InputMethodManager) activity.getSystemService(Context.INPUT_METHOD_SERVICE);
+//        imm.showSoftInput(view, InputMethodManager.SHOW_IMPLICIT);
+            imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
         }
     }
 }
