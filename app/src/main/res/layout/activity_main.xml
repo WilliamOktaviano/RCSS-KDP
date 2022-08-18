@@ -37,6 +37,28 @@
                 android:layout_marginTop="20dp"
                 android:layout_marginRight="10dp"
                 android:layout_marginBottom="10dp"
+                android:text="Site\nID"
+                android:textSize="15dp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="left"
+                android:layout_marginLeft="20dp"
+                android:layout_marginTop="20dp"
+                android:layout_marginRight="10dp"
+                android:layout_marginBottom="10dp"
+                android:text="Site\nID"
+                android:textSize="15dp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="left"
+                android:layout_marginLeft="20dp"
+                android:layout_marginTop="20dp"
+                android:layout_marginRight="10dp"
+                android:layout_marginBottom="10dp"
                 android:text="Customer\nNumber"
                 android:textSize="15dp" />
 
@@ -49,17 +71,6 @@
                 android:layout_marginRight="10dp"
                 android:layout_marginBottom="10dp"
                 android:text="Customer\nName"
-                android:textSize="15dp" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="left"
-                android:layout_marginLeft="20dp"
-                android:layout_marginTop="20dp"
-                android:layout_marginRight="10dp"
-                android:layout_marginBottom="10dp"
-                android:text="Site\nID"
                 android:textSize="15dp" />
 
             <TextView
@@ -114,6 +125,27 @@
             android:layout_weight="1"
             android:orientation="vertical">
 
+            <AutoCompleteTextView
+                android:id="@+id/actvSiteID"
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:layout_marginLeft="20dp"
+                android:layout_marginTop="20dp"
+                android:layout_marginRight="10dp"
+                android:layout_marginBottom="10dp"
+                android:textSize="18dp"
+                android:hint="Silahkan input kode site id"></AutoCompleteTextView>
+
+            <Spinner
+                android:id="@+id/spinnerSiteID"
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:layout_marginLeft="20dp"
+                android:layout_marginTop="20dp"
+                android:layout_marginRight="10dp"
+                android:layout_marginBottom="10dp"
+                android:textSize="18dp"></Spinner>
+
             <EditText
                 android:id="@+id/editCustNumber"
                 android:layout_width="match_parent"
@@ -135,17 +167,6 @@
                 android:layout_marginBottom="10dp"
                 android:textSize="18dp"
                 tools:text="Customer Name"></TextView>
-
-            <EditText
-                android:id="@+id/editSiteID"
-                android:layout_width="match_parent"
-                android:layout_height="40dp"
-                android:layout_marginLeft="20dp"
-                android:layout_marginTop="20dp"
-                android:layout_marginRight="10dp"
-                android:layout_marginBottom="10dp"
-                android:textSize="18dp"
-                tools:text="Silahkan input kode site id"></EditText>
 
             <EditText
                 android:id="@+id/editItemNumber"
@@ -203,7 +224,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:layout_marginBottom="20dp"
+        android:layout_marginBottom="10dp"
         android:onClick="process"
         android:text="SELECT" />
 </LinearLayout>
