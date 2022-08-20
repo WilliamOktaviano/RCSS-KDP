@@ -55,9 +55,9 @@ public class MainActivity extends AppCompatActivity {
                     msg.setText("Query Executed");
 
                     while (result.next()) {
-                        custnumber.setText(result.getString(1));
-                        custname.setText(result.getString(2));
-                        siteid.setText(result.getString(3));
+                        siteid.setText(result.getString(1));
+                        custnumber.setText(result.getString(2));
+                        custname.setText(result.getString(3));
                         itemnumber.setText(result.getString(4));
                         itemname.setText(result.getString(5));
                         quantity.setText(result.getString(6));
