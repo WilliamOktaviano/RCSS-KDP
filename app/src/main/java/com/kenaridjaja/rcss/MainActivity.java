@@ -1,12 +1,10 @@
 package com.kenaridjaja.rcss;
 
-import android.app.Activity;
 import android.content.Context;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
-import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
@@ -25,7 +23,6 @@ import java.util.ArrayList;
 public class MainActivity extends AppCompatActivity {
 
     Connection con;
-    Spinner spinner;
     AutoCompleteTextView siteid;
 
     @Override
@@ -41,7 +38,7 @@ public class MainActivity extends AppCompatActivity {
         TextView pricelist = findViewById(R.id.tvPrice);
         Button process = findViewById(R.id.btnSelect);
         TextView msg = findViewById(R.id.msg);
-        spinner = findViewById(R.id.spinnerSiteID);
+
 
         FillSpinnerSiteID();
 
@@ -85,7 +82,7 @@ public class MainActivity extends AppCompatActivity {
             ResultSet result = statement.executeQuery(Q);
 
             ArrayList<String> data = new ArrayList<>();
-            data.add(0, "Pilih Site ID!");
+//            data.add(0, "Pilih Site ID!");
             while (result.next()) {
                 String siteid = result.getString("SITE");
                 data.add(siteid);
@@ -116,19 +113,11 @@ public class MainActivity extends AppCompatActivity {
 //                }
 //            });
 
-            siteid.setOnItemClickListener(new AdapterView.OnItemClickListener(){
-                @Override
-                public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                    if(parent.getItemAtPosition(position).equals("Pilih Site ID!"))
-                    {
+            siteid.setOnItemClickListener((parent, view, position, id) -> {
 
-                    }
-                    else{
-                        String item = parent.getItemAtPosition(position).toString();
-                        Toast.makeText(parent.getContext(), "A: " + item, Toast.LENGTH_SHORT).show();
-                    }
-
-                }
+                String item = parent.getItemAtPosition(position).toString();
+                Toast.makeText(parent.getContext(), "A: " + item, Toast.LENGTH_SHORT).show();
+                hideKeyPad();
 
 //                @Override
 //                public void onNothingSelected(AdapterView<?> parent){
@@ -137,16 +126,15 @@ public class MainActivity extends AppCompatActivity {
             });
 
 
-
-
         } catch (Exception ex) {
             Log.e("Set Error", ex.getMessage());
         }
     }
 
-    public void hideKeyPad(Activity activity, View view) {
+    public void hideKeyPad() {
+        View view = this.getCurrentFocus();
         if (view != null) {
-            InputMethodManager imm = (InputMethodManager) activity.getSystemService(Context.INPUT_METHOD_SERVICE);
+            InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
 //        imm.showSoftInput(view, InputMethodManager.SHOW_IMPLICIT);
             imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
         }
