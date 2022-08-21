@@ -1,4 +1,4 @@
-package com.kenaridjaja.rcss;
+package com.kenaridjaja.rcss.Connection;
 
 import android.annotation.SuppressLint;
 import android.os.StrictMode;
@@ -25,7 +25,5 @@ public class ConnectionHelper {
             Log.e("Set Error", ex.getMessage());
         }
         return connection;
-
-
     }
 }

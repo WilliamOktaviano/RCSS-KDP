@@ -9,11 +9,12 @@ import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
+
+import com.kenaridjaja.rcss.Connection.ConnectionHelper;
 
 import java.sql.Connection;
 import java.sql.ResultSet;
@@ -39,9 +40,7 @@ public class MainActivity extends AppCompatActivity {
         Button process = findViewById(R.id.btnSelect);
         TextView msg = findViewById(R.id.msg);
 
-
         FillSpinnerSiteID();
-
 
         process.setOnClickListener(v -> {
             ConnectionHelper connectionHelper = new ConnectionHelper();
@@ -82,7 +81,6 @@ public class MainActivity extends AppCompatActivity {
             ResultSet result = statement.executeQuery(Q);
 
             ArrayList<String> data = new ArrayList<>();
-//            data.add(0, "Pilih Site ID!");
             while (result.next()) {
                 String siteid = result.getString("SITE");
                 data.add(siteid);
@@ -93,49 +91,40 @@ public class MainActivity extends AppCompatActivity {
 
             siteid.setThreshold(1);
             siteid.setAdapter(dataAdapter);
-//            spinner.setAdapter(dataAdapter);
-//            spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener(){
-//                @Override
-//                public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-//                    if(parent.getItemAtPosition(position).equals("Pilih Site ID!"))
-//                    {
-//
-//                    }
-//                    else{
-//                        String item = parent.getItemAtPosition(position).toString();
-//                        Toast.makeText(parent.getContext(), "Selected: " + item, Toast.LENGTH_SHORT).show();
-//                    }
-//                }
-//
-//                @Override
-//                public void onNothingSelected(AdapterView<?> parent){
-//                    //TODO Auto-generated method stub
-//                }
-//            });
-
             siteid.setOnItemClickListener((parent, view, position, id) -> {
-
                 String item = parent.getItemAtPosition(position).toString();
                 Toast.makeText(parent.getContext(), "A: " + item, Toast.LENGTH_SHORT).show();
                 hideKeyPad();
-
-//                @Override
-//                public void onNothingSelected(AdapterView<?> parent){
-//                    //TODO Auto-generated method stub
-//                }
             });
-
-
         } catch (Exception ex) {
             Log.e("Set Error", ex.getMessage());
         }
     }
 
+    public void FillCustomerNumberChoice(){
+        try {
+            ConnectionHelper connectionHelper = new ConnectionHelper();
+            con = connectionHelper.ConnectionClass();
+
+            String Q = "SELECT DISTINCT [CUST_NUMBER] FROM dbo.rcssmasterdb WHERE SITE ='"+ siteid.getText()+"';";
+            Statement statement = con.createStatement();
+            ResultSet result = statement.executeQuery(Q);
+
+            ArrayList<String> data = new ArrayList<>();
+            while (result.next()) {
+                String custnumber = result.getString("CUST_NUMBER");
+                data.add(custnumber);
+            }
+
+
+        }catch (Exception ex) {
+            Log.e("Set Error", ex.getMessage());
+        }
+    }
     public void hideKeyPad() {
         View view = this.getCurrentFocus();
         if (view != null) {
             InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-//        imm.showSoftInput(view, InputMethodManager.SHOW_IMPLICIT);
             imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
         }
     }
