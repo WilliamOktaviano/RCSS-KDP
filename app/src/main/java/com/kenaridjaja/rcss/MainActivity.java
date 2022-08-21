@@ -25,13 +25,15 @@ public class MainActivity extends AppCompatActivity {
 
     Connection con;
     AutoCompleteTextView siteid;
+    AutoCompleteTextView custnumber;
+    TextView custname;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        EditText custnumber = findViewById(R.id.editCustNumber);
-        TextView custname = findViewById(R.id.tvCustName);
+        custnumber = findViewById(R.id.actvCustNumber);
+        custname = findViewById(R.id.tvCustName);
         siteid = findViewById(R.id.actvSiteID);
         EditText itemnumber = findViewById(R.id.editItemNumber);
         TextView itemname = findViewById(R.id.tvItemName);
@@ -41,6 +43,7 @@ public class MainActivity extends AppCompatActivity {
         TextView msg = findViewById(R.id.msg);
 
         FillSpinnerSiteID();
+
 
         process.setOnClickListener(v -> {
             ConnectionHelper connectionHelper = new ConnectionHelper();
@@ -95,6 +98,8 @@ public class MainActivity extends AppCompatActivity {
                 String item = parent.getItemAtPosition(position).toString();
                 Toast.makeText(parent.getContext(), "A: " + item, Toast.LENGTH_SHORT).show();
                 hideKeyPad();
+                FillCustomerNumberChoice();
+
             });
         } catch (Exception ex) {
             Log.e("Set Error", ex.getMessage());
@@ -115,12 +120,28 @@ public class MainActivity extends AppCompatActivity {
                 String custnumber = result.getString("CUST_NUMBER");
                 data.add(custnumber);
             }
+            ArrayAdapter<String> dataAdapter;
+            dataAdapter = new ArrayAdapter(this, android.R.layout.simple_spinner_item, data);
+            dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 
-
+            custnumber.setThreshold(1);
+            custnumber.setAdapter(dataAdapter);
+            custnumber.setOnItemClickListener((parent, view, position, id) -> {
+                String item = parent.getItemAtPosition(position).toString();
+                Toast.makeText(parent.getContext(), "A: " + item, Toast.LENGTH_SHORT).show();
+                hideKeyPad();
+            });
         }catch (Exception ex) {
             Log.e("Set Error", ex.getMessage());
         }
     }
+
+//    public void FillText(){
+//        try {
+//
+//        }
+//    }
+
     public void hideKeyPad() {
         View view = this.getCurrentFocus();
         if (view != null) {

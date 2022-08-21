@@ -11,13 +11,15 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="RCSS\nRetail Chain Support System"
+        android:layout_marginTop="40dp"
         android:textAlignment="center" />
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="20dp"
-        android:layout_marginEnd="20dp">
+        android:layout_marginEnd="20dp"
+        android:layout_marginTop="30dp">
 
         <LinearLayout
             android:layout_width="wrap_content"
@@ -92,23 +94,42 @@
 
             </com.google.android.material.textfield.TextInputLayout>
 
-            <EditText
-                android:id="@+id/editCustNumber"
-                style="@style/defaultMarginInputView"
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/rlactvCustNumber"
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_below="@id/rlactvSiteID"
-                android:layout_marginTop="20dp"
-                android:hint="Customer Number"></EditText>
+                android:layout_marginTop="10dp">
+
+                <AutoCompleteTextView
+                    android:id="@+id/actvCustNumber"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="Customer Number ID!"
+                    android:imeOptions="actionNext"
+                    android:inputType="text"
+                    android:textSize="15dp"></AutoCompleteTextView>
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+<!--            <EditText-->
+<!--                android:id="@+id/editCustNumber"-->
+<!--                style="@style/defaultMarginInputView"-->
+<!--                android:layout_width="match_parent"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:layout_below="@id/rlactvSiteID"-->
+<!--                android:layout_marginTop="20dp"-->
+<!--                android:hint="Customer Number"></EditText>-->
 
             <TextView
                 android:id="@+id/tvCustName"
                 style="@style/defaultMarginInputView"
                 android:layout_width="match_parent"
                 android:layout_height="39dp"
-                android:layout_below="@id/editCustNumber"
+                android:layout_below="@id/rlactvCustNumber"
                 android:layout_marginLeft="3dp"
-                android:layout_marginTop="24dp"
+                android:layout_marginTop="30dp"
                 android:hint="Customer Name"></TextView>
 
             <EditText
