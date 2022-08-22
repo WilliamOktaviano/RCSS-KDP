@@ -26,6 +26,7 @@ public class MainActivity extends AppCompatActivity {
     Connection con;
     AutoCompleteTextView siteid;
     AutoCompleteTextView custnumber;
+    AutoCompleteTextView itemnumber;
     TextView custname;
 
     @Override
@@ -35,7 +36,7 @@ public class MainActivity extends AppCompatActivity {
         custnumber = findViewById(R.id.actvCustNumber);
         custname = findViewById(R.id.tvCustName);
         siteid = findViewById(R.id.actvSiteID);
-        EditText itemnumber = findViewById(R.id.editItemNumber);
+        itemnumber = findViewById(R.id.actvItemNumber);
         TextView itemname = findViewById(R.id.tvItemName);
         TextView quantity = findViewById(R.id.tvQty);
         TextView pricelist = findViewById(R.id.tvPrice);
@@ -136,11 +137,37 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-//    public void FillText(){
-//        try {
-//
-//        }
-//    }
+    public void FillItemNumber(){
+        try {
+            ConnectionHelper connectionHelper = new ConnectionHelper();
+
+            con = connectionHelper.ConnectionClass();
+
+            String Q = "SELECT [ITEM_NUMBER] FROM dbo.rcssmasterdb WHERE CUST_NUMBER ='" + custnumber.getText() + "';";
+            Statement statement = con.createStatement();
+            ResultSet result = statement.executeQuery(Q);
+
+            ArrayList<String> data = new ArrayList<>();
+            while (result.next()) {
+                String itemnumber = result.getString("ITEM_NUMBER");
+                data.add(itemnumber);
+            }
+            ArrayAdapter<String> dataAdapter;
+            dataAdapter = new ArrayAdapter(this, android.R.layout.simple_spinner_item, data);
+            dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+
+            itemnumber.setThreshold(1);
+            itemnumber.setAdapter(dataAdapter);
+            itemnumber.setOnItemClickListener((parent, view, position, id) -> {
+                String item = parent.getItemAtPosition(position).toString();
+                Toast.makeText(parent.getContext(), "A: " + item, Toast.LENGTH_SHORT).show();
+                hideKeyPad();
+            });
+
+        }catch (Exception ex){
+            Log.e("Set Error", ex.getMessage());
+        }
+    }
 
     public void hideKeyPad() {
         View view = this.getCurrentFocus();
