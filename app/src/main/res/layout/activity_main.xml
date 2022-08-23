@@ -129,26 +129,45 @@
                 android:layout_height="39dp"
                 android:layout_below="@id/rlactvCustNumber"
                 android:layout_marginLeft="3dp"
-                android:layout_marginTop="30dp"
+                android:layout_marginTop="31dp"
                 android:hint="Customer Name"></TextView>
 
-            <EditText
-                android:id="@+id/editItemNumber"
-                style="@style/defaultMarginInputView"
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/rlactvItemNumber"
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_below="@id/tvCustName"
-                android:layout_marginTop="23dp"
-                android:hint="Item Number"></EditText>
+                android:layout_marginTop="10dp">
+
+                <AutoCompleteTextView
+                    android:id="@+id/actvItemNumber"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="Item Number!"
+                    android:imeOptions="actionNext"
+                    android:inputType="text"
+                    android:textSize="15dp"></AutoCompleteTextView>
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <!--            <EditText-->
+<!--                android:id="@+id/editItemNumber"-->
+<!--                style="@style/defaultMarginInputView"-->
+<!--                android:layout_width="match_parent"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:layout_below="@id/tvCustName"-->
+<!--                android:layout_marginTop="23dp"-->
+<!--                android:hint="Item Number"></EditText>-->
 
             <TextView
                 android:id="@+id/tvItemName"
                 style="@style/defaultMarginInputView"
                 android:layout_width="match_parent"
                 android:layout_height="39dp"
-                android:layout_below="@id/editItemNumber"
+                android:layout_below="@id/rlactvItemNumber"
                 android:layout_marginLeft="3dp"
-                android:layout_marginTop="22dp"
+                android:layout_marginTop="31dp"
                 android:hint="Item Name"></TextView>
 
             <TextView

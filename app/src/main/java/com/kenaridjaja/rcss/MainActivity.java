@@ -129,8 +129,9 @@ public class MainActivity extends AppCompatActivity {
             custnumber.setAdapter(dataAdapter);
             custnumber.setOnItemClickListener((parent, view, position, id) -> {
                 String item = parent.getItemAtPosition(position).toString();
-                Toast.makeText(parent.getContext(), "A: " + item, Toast.LENGTH_SHORT).show();
+                Toast.makeText(parent.getContext(), "B: " + item, Toast.LENGTH_SHORT).show();
                 hideKeyPad();
+                FillItemNumber();
             });
         }catch (Exception ex) {
             Log.e("Set Error", ex.getMessage());
@@ -160,7 +161,7 @@ public class MainActivity extends AppCompatActivity {
             itemnumber.setAdapter(dataAdapter);
             itemnumber.setOnItemClickListener((parent, view, position, id) -> {
                 String item = parent.getItemAtPosition(position).toString();
-                Toast.makeText(parent.getContext(), "A: " + item, Toast.LENGTH_SHORT).show();
+                Toast.makeText(parent.getContext(), "C: " + item, Toast.LENGTH_SHORT).show();
                 hideKeyPad();
             });
 
