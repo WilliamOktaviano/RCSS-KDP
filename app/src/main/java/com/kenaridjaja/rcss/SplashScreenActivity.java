@@ -7,7 +7,7 @@ import android.os.Handler;
 import androidx.appcompat.app.AppCompatActivity;
 
 public class SplashScreenActivity extends AppCompatActivity {
-    private int loading_time=4000;
+    private int loading_time=3000;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

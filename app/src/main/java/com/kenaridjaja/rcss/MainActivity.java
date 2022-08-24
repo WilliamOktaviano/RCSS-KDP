@@ -31,6 +31,8 @@ public class MainActivity extends AppCompatActivity {
     AutoCompleteTextView itemnumber;
     TextView custname;
     TextView itemname;
+    TextView quantity;
+    TextView price;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,41 +43,41 @@ public class MainActivity extends AppCompatActivity {
         siteid = findViewById(R.id.actvSiteID);
         itemnumber = findViewById(R.id.actvItemNumber);
         itemname = findViewById(R.id.tvItemName);
-        TextView quantity = findViewById(R.id.tvQty);
-        TextView pricelist = findViewById(R.id.tvPrice);
+        quantity = findViewById(R.id.tvQtyAvailable);
+        price = findViewById(R.id.tvPrice);
         Button process = findViewById(R.id.btnSelect);
         TextView msg = findViewById(R.id.msg);
 
         FillSpinnerSiteID();
 
 
-        process.setOnClickListener(v -> {
-            ConnectionHelper connectionHelper = new ConnectionHelper();
-            con = connectionHelper.ConnectionClass();
-            try {
-                if (con != null) {
-                    String Q = "Select * from dbo.rcssmasterdb Where CUST_NUMBER=" +
-                            "'2200001'AND ITEM_NUMBER='951000000'";
-                    Statement statement = con.createStatement();
-                    ResultSet result = statement.executeQuery(Q);
-                    msg.setText("Query Executed");
-
-                    while (result.next()) {
-                        siteid.setText(result.getString(1));
-                        custnumber.setText(result.getString(2));
-                        custname.setText(result.getString(3));
-                        itemnumber.setText(result.getString(4));
-                        itemname.setText(result.getString(5));
-                        quantity.setText(result.getString(6));
-                        pricelist.setText(result.getString(7));
-                    }
-                } else {
-                    msg.setText("Error in Connection");
-                }
-            } catch (Exception ex) {
-                Log.e("Set Error", ex.getMessage());
-            }
-        });
+//        process.setOnClickListener(v -> {
+//            ConnectionHelper connectionHelper = new ConnectionHelper();
+//            con = connectionHelper.ConnectionClass();
+//            try {
+//                if (con != null) {
+//                    String Q = "Select * from dbo.rcssmasterdb Where CUST_NUMBER=" +
+//                            "'2200001'AND ITEM_NUMBER='951000000'";
+//                    Statement statement = con.createStatement();
+//                    ResultSet result = statement.executeQuery(Q);
+//                    msg.setText("Query Executed");
+//
+//                    while (result.next()) {
+//                        siteid.setText(result.getString(1));
+//                        custnumber.setText(result.getString(2));
+//                        custname.setText(result.getString(3));
+//                        itemnumber.setText(result.getString(4));
+//                        itemname.setText(result.getString(5));
+//                        quantity.setText(result.getString(6));
+//                        pricelist.setText(result.getString(7));
+//                    }
+//                } else {
+//                    msg.setText("Error in Connection");
+//                }
+//            } catch (Exception ex) {
+//                Log.e("Set Error", ex.getMessage());
+//            }
+//        });
     }
 
     public void FillSpinnerSiteID() {
@@ -86,7 +88,6 @@ public class MainActivity extends AppCompatActivity {
             String Q = "SELECT DISTINCT [SITE] FROM dbo.rcssmasterdb";
             Statement statement = con.createStatement();
             ResultSet result = statement.executeQuery(Q);
-
             ArrayList<String> data = new ArrayList<>();
             while (result.next()) {
                 String siteid = result.getString("SITE");
@@ -118,7 +119,6 @@ public class MainActivity extends AppCompatActivity {
             String Q = "SELECT DISTINCT a.[CUST_NUMBER], a.[CUST_NAME] FROM (SELECT [SITE], [CUST_NUMBER], [CUST_NAME] FROM dbo.rcssmasterdb) a WHERE SITE = '" + siteid.getText() + "' ORDER BY [CUST_NUMBER];";
             Statement statement = con.createStatement();
             ResultSet result = statement.executeQuery(Q);
-
             ArrayList<String> data = new ArrayList<>();
             ArrayList<String> data2 = new ArrayList<>();
             while (result.next()) {
@@ -153,18 +153,24 @@ public class MainActivity extends AppCompatActivity {
             ConnectionHelper connectionHelper = new ConnectionHelper();
             con = connectionHelper.ConnectionClass();
 
-            String Q = "SELECT [ITEM_NUMBER], [ITEM_NAME] FROM dbo.rcssmasterdb WHERE CUST_NUMBER ='" + custnumber.getText() + "';";
+            String Q = "SELECT [ITEM_NUMBER], [ITEM_NAME], [QTY_AVAILABLE], [PRICE] FROM dbo.rcssmasterdb WHERE CUST_NUMBER ='" + custnumber.getText() + "';";
             Statement statement = con.createStatement();
             ResultSet result = statement.executeQuery(Q);
 
             ArrayList<String> data = new ArrayList<>();
             ArrayList<String> data2 = new ArrayList<>();
+            ArrayList<String> data3 = new ArrayList<>();
+            ArrayList<String> data4 = new ArrayList<>();
 
             while (result.next()) {
                 String itemnumber = result.getString("ITEM_NUMBER");
                 String itemname = result.getString("ITEM_NAME");
+                String qtyavailable = result.getString("QTY_AVAILABLE");
+                String price = result.getString("PRICE");
                 data.add(itemnumber);
                 data2.add(itemname);
+                data3.add(qtyavailable);
+                data4.add(price);
             }
             ArrayAdapter<String> dataAdapter;
             dataAdapter = new ArrayAdapter(this, android.R.layout.simple_spinner_item, data);
@@ -176,6 +182,8 @@ public class MainActivity extends AppCompatActivity {
                 String item = parent.getItemAtPosition(position).toString();
                 Toast.makeText(parent.getContext(), "C: " + item, Toast.LENGTH_SHORT).show();
                 itemname.setText(data2.get(position));
+                quantity.setText(data3.get(position));
+                price.setText(data4.get(position));
                 hideKeyPad();
             });
 
