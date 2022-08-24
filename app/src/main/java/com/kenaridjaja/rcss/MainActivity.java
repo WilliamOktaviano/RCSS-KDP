@@ -16,6 +16,8 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.kenaridjaja.rcss.Connection.ConnectionHelper;
 
+import org.w3c.dom.Text;
+
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.Statement;
@@ -28,6 +30,7 @@ public class MainActivity extends AppCompatActivity {
     AutoCompleteTextView custnumber;
     AutoCompleteTextView itemnumber;
     TextView custname;
+    TextView itemname;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,7 +40,7 @@ public class MainActivity extends AppCompatActivity {
         custname = findViewById(R.id.tvCustName);
         siteid = findViewById(R.id.actvSiteID);
         itemnumber = findViewById(R.id.actvItemNumber);
-        TextView itemname = findViewById(R.id.tvItemName);
+        itemname = findViewById(R.id.tvItemName);
         TextView quantity = findViewById(R.id.tvQty);
         TextView pricelist = findViewById(R.id.tvPrice);
         Button process = findViewById(R.id.btnSelect);
@@ -93,7 +96,7 @@ public class MainActivity extends AppCompatActivity {
             dataAdapter = new ArrayAdapter(this, android.R.layout.simple_spinner_item, data);
             dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 
-            siteid.setThreshold(1);
+            siteid.setThreshold(1); //start from first character of typing
             siteid.setAdapter(dataAdapter);
             siteid.setOnItemClickListener((parent, view, position, id) -> {
                 String item = parent.getItemAtPosition(position).toString();
@@ -107,20 +110,24 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    public void FillCustomerNumberChoice(){
+    public void FillCustomerNumberChoice() {
         try {
             ConnectionHelper connectionHelper = new ConnectionHelper();
             con = connectionHelper.ConnectionClass();
 
-            String Q = "SELECT DISTINCT [CUST_NUMBER] FROM dbo.rcssmasterdb WHERE SITE ='"+ siteid.getText()+"';";
+            String Q = "SELECT DISTINCT a.[CUST_NUMBER], a.[CUST_NAME] FROM (SELECT [SITE], [CUST_NUMBER], [CUST_NAME] FROM dbo.rcssmasterdb) a WHERE SITE = '" + siteid.getText() + "' ORDER BY [CUST_NUMBER];";
             Statement statement = con.createStatement();
             ResultSet result = statement.executeQuery(Q);
 
             ArrayList<String> data = new ArrayList<>();
+            ArrayList<String> data2 = new ArrayList<>();
             while (result.next()) {
                 String custnumber = result.getString("CUST_NUMBER");
+                String custname = result.getString("CUST_NAME");
                 data.add(custnumber);
+                data2.add(custname);
             }
+
             ArrayAdapter<String> dataAdapter;
             dataAdapter = new ArrayAdapter(this, android.R.layout.simple_spinner_item, data);
             dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
@@ -128,30 +135,36 @@ public class MainActivity extends AppCompatActivity {
             custnumber.setThreshold(1);
             custnumber.setAdapter(dataAdapter);
             custnumber.setOnItemClickListener((parent, view, position, id) -> {
+
                 String item = parent.getItemAtPosition(position).toString();
                 Toast.makeText(parent.getContext(), "B: " + item, Toast.LENGTH_SHORT).show();
+                custname.setText(data2.get(position));
                 hideKeyPad();
                 FillItemNumber();
+
             });
-        }catch (Exception ex) {
+        } catch (Exception ex) {
             Log.e("Set Error", ex.getMessage());
         }
     }
 
-    public void FillItemNumber(){
+    public void FillItemNumber() {
         try {
             ConnectionHelper connectionHelper = new ConnectionHelper();
-
             con = connectionHelper.ConnectionClass();
 
-            String Q = "SELECT [ITEM_NUMBER] FROM dbo.rcssmasterdb WHERE CUST_NUMBER ='" + custnumber.getText() + "';";
+            String Q = "SELECT [ITEM_NUMBER], [ITEM_NAME] FROM dbo.rcssmasterdb WHERE CUST_NUMBER ='" + custnumber.getText() + "';";
             Statement statement = con.createStatement();
             ResultSet result = statement.executeQuery(Q);
 
             ArrayList<String> data = new ArrayList<>();
+            ArrayList<String> data2 = new ArrayList<>();
+
             while (result.next()) {
                 String itemnumber = result.getString("ITEM_NUMBER");
+                String itemname = result.getString("ITEM_NAME");
                 data.add(itemnumber);
+                data2.add(itemname);
             }
             ArrayAdapter<String> dataAdapter;
             dataAdapter = new ArrayAdapter(this, android.R.layout.simple_spinner_item, data);
@@ -162,10 +175,11 @@ public class MainActivity extends AppCompatActivity {
             itemnumber.setOnItemClickListener((parent, view, position, id) -> {
                 String item = parent.getItemAtPosition(position).toString();
                 Toast.makeText(parent.getContext(), "C: " + item, Toast.LENGTH_SHORT).show();
+                itemname.setText(data2.get(position));
                 hideKeyPad();
             });
 
-        }catch (Exception ex){
+        } catch (Exception ex) {
             Log.e("Set Error", ex.getMessage());
         }
     }
