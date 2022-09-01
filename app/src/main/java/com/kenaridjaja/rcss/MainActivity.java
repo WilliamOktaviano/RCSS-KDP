@@ -2,6 +2,8 @@ package com.kenaridjaja.rcss;
 
 import android.content.Context;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
@@ -33,6 +35,40 @@ public class MainActivity extends AppCompatActivity {
     TextView itemname;
     TextView quantity;
     TextView price;
+    EditText inputqty;
+
+    TextView statQty;
+
+    int qtyInput = 0;
+
+    private TextWatcher textWatcher = new TextWatcher() {
+        @Override
+        public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+        }
+
+        @Override
+        public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+            try {
+                qtyInput = Integer.valueOf(inputqty.getText().toString());
+                float qtyAvailable = Float.valueOf(quantity.getText().toString());
+
+                if (qtyInput > qtyAvailable) {
+                    statQty.setText("Qty\nKurang");
+                } else if (qtyInput <= qtyAvailable) {
+                    statQty.setText("OK");
+                }
+            }
+            catch(NumberFormatException nfe){
+                Toast.makeText(getApplicationContext(), "Wrong parsing format", Toast.LENGTH_SHORT).show();
+            }
+        }
+
+        @Override
+        public void afterTextChanged(Editable editable) {
+
+        }
+    };
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,9 +80,13 @@ public class MainActivity extends AppCompatActivity {
         itemnumber = findViewById(R.id.actvItemNumber);
         itemname = findViewById(R.id.tvItemName);
         quantity = findViewById(R.id.tvQtyAvailable);
+        statQty = findViewById(R.id.statusQty);
+        inputqty = findViewById(R.id.editQtyOrdered);
         price = findViewById(R.id.tvPrice);
-        Button process = findViewById(R.id.btnSelect);
-        TextView msg = findViewById(R.id.msg);
+
+        inputqty.addTextChangedListener(textWatcher);
+//        Button process = findViewById(R.id.btnSelect);
+//        TextView msg = findViewById(R.id.msg);
 
         FillSpinnerSiteID();
 
@@ -185,6 +225,7 @@ public class MainActivity extends AppCompatActivity {
                 quantity.setText(data3.get(position));
                 price.setText(data4.get(position));
                 hideKeyPad();
+
             });
 
         } catch (Exception ex) {
