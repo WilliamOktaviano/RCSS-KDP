@@ -1,24 +1,27 @@
 package com.kenaridjaja.rcss;
 
 import android.content.Context;
+import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TableLayout;
+import android.widget.TableRow;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.kenaridjaja.rcss.Connection.ConnectionHelper;
-
-import org.w3c.dom.Text;
 
 import java.sql.Connection;
 import java.sql.ResultSet;
@@ -35,13 +38,17 @@ public class MainActivity extends AppCompatActivity {
     TextView itemname;
     TextView quantity;
     TextView price;
+
     EditText inputqty;
 
     TextView statQty;
 
-    int qtyInput = 0;
+    TextView msg;
+    Button process;
 
-    private TextWatcher textWatcher = new TextWatcher() {
+    int qtyInput;
+
+    private final TextWatcher textWatcher = new TextWatcher() {
         @Override
         public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
 
@@ -50,17 +57,16 @@ public class MainActivity extends AppCompatActivity {
         @Override
         public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
             try {
-                qtyInput = Integer.valueOf(inputqty.getText().toString());
-                float qtyAvailable = Float.valueOf(quantity.getText().toString());
+                qtyInput = Integer.parseInt(inputqty.getText().toString());
+                float qtyAvailable = Float.parseFloat(quantity.getText().toString());
 
                 if (qtyInput > qtyAvailable) {
                     statQty.setText("Qty\nKurang");
                 } else if (qtyInput <= qtyAvailable) {
                     statQty.setText("OK");
                 }
-            }
-            catch(NumberFormatException nfe){
-                Toast.makeText(getApplicationContext(), "Wrong parsing format", Toast.LENGTH_SHORT).show();
+            } catch (NumberFormatException nfe) {
+                Toast.makeText(getApplicationContext(), "Qty Input harus diisi!", Toast.LENGTH_SHORT).show();
             }
         }
 
@@ -83,6 +89,8 @@ public class MainActivity extends AppCompatActivity {
         statQty = findViewById(R.id.statusQty);
         inputqty = findViewById(R.id.editQtyOrdered);
         price = findViewById(R.id.tvPrice);
+        process = findViewById(R.id.btnNext);
+        msg = findViewById(R.id.msg);
 
         inputqty.addTextChangedListener(textWatcher);
 //        Button process = findViewById(R.id.btnSelect);
@@ -90,7 +98,36 @@ public class MainActivity extends AppCompatActivity {
 
         FillSpinnerSiteID();
 
+        init();
 
+        process.setOnClickListener(v -> {
+            ConnectionHelper connectionHelper = new ConnectionHelper();
+            con = connectionHelper.ConnectionClass();
+            try {
+                if (con != null) {
+                    startActivity(new Intent(MainActivity.this, ResultActivity.class));
+//                    String Q = "Select * from dbo.rcssmasterdb Where CUST_NUMBER=" +
+//                            "'2200001'AND ITEM_NUMBER='951000000'";
+//                    Statement statement = con.createStatement();
+//                    ResultSet result = statement.executeQuery(Q);
+//                    msg.setText("Query Executed");
+//
+//                    while (result.next()) {
+//                        siteid.setText(result.getString(1));
+//                        custnumber.setText(result.getString(2));
+//                        custname.setText(result.getString(3));
+//                        itemnumber.setText(result.getString(4));
+//                        itemname.setText(result.getString(5));
+//                        quantity.setText(result.getString(6));
+//                        pricelist.setText(result.getString(7));
+                }
+                else {
+                msg.setText("Error in Connection");
+                }
+                } catch(Exception ex) {
+                Log.e("Set Error", ex.getMessage());
+            }});
+    }
 //        process.setOnClickListener(v -> {
 //            ConnectionHelper connectionHelper = new ConnectionHelper();
 //            con = connectionHelper.ConnectionClass();
@@ -118,7 +155,7 @@ public class MainActivity extends AppCompatActivity {
 //                Log.e("Set Error", ex.getMessage());
 //            }
 //        });
-    }
+
 
     public void FillSpinnerSiteID() {
         try {
@@ -230,6 +267,52 @@ public class MainActivity extends AppCompatActivity {
 
         } catch (Exception ex) {
             Log.e("Set Error", ex.getMessage());
+        }
+    }
+
+    public void init() {
+        TableLayout stk = findViewById(R.id.table_main);
+        TableRow tbrow0 = new TableRow(this);
+        TextView tv0 = new TextView(this);
+        tv0.setText(" Sl.No ");
+        tv0.setTextColor(Color.WHITE);
+        tbrow0.addView(tv0);
+        TextView tv1 = new TextView(this);
+        tv1.setText(" Product ");
+        tv1.setTextColor(Color.WHITE);
+        tbrow0.addView(tv1);
+        TextView tv2 = new TextView(this);
+        tv2.setText(" Unit Price ");
+        tv2.setTextColor(Color.WHITE);
+        tbrow0.addView(tv2);
+        TextView tv3 = new TextView(this);
+        tv3.setText(" Stock Remaining ");
+        tv3.setTextColor(Color.WHITE);
+        tbrow0.addView(tv3);
+        stk.addView(tbrow0);
+        for (int i = 0; i < 25; i++) {
+            TableRow tbrow = new TableRow(this);
+            TextView t1v = new TextView(this);
+            t1v.setText("" + i);
+            t1v.setTextColor(Color.WHITE);
+            t1v.setGravity(Gravity.CENTER);
+            tbrow.addView(t1v);
+            TextView t2v = new TextView(this);
+            t2v.setText("Product " + i);
+            t2v.setTextColor(Color.WHITE);
+            t2v.setGravity(Gravity.CENTER);
+            tbrow.addView(t2v);
+            TextView t3v = new TextView(this);
+            t3v.setText("Rs." + i);
+            t3v.setTextColor(Color.WHITE);
+            t3v.setGravity(Gravity.CENTER);
+            tbrow.addView(t3v);
+            TextView t4v = new TextView(this);
+            t4v.setText("" + i * 15 / 32 * 10);
+            t4v.setTextColor(Color.WHITE);
+            t4v.setGravity(Gravity.CENTER);
+            tbrow.addView(t4v);
+            stk.addView(tbrow);
         }
     }
 

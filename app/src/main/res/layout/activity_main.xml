@@ -242,7 +242,7 @@
             android:layout_gravity="center"
             android:layout_marginBottom="10dp"
             android:onClick="process"
-            android:text="SELECT" />
+            android:text="Process" />
 
     </LinearLayout>
 
